@@ -1,4 +1,4 @@
 runname	start_date	flowcell_name	num_barcode	fast5_size	fastq_size	num_reads	run_time	note
 LIBMMDD_[ncov|denv|mixed]_[n]	YYYY-MM-DD	FAPXXXX	BC01-BC99	9.9G	1.5G	99M	99h	size=fastX_pass;fastq=realtime
 LIB0617_ncov_3	2021-06-17	FAP75865	BC01-BC12	10.81G	1.46G	-	-	pooled 3 rounds
-LIB0628_ncov_1	2021-06-28	FAP76995	BC01-BC14	111G	4.40G	6.22M	17.5h
+LIB0628_ncov_1	2021-06-28	FAP76995	BC01-BC14	111G	4.40G	6.22M	17.5h	-	

@@ -117,17 +117,21 @@ for( i in 1: length( sub_folder ) )
   
   n_lowCov_region = dim(cov_mask)[1] - 2
   
-  OUT_n_lowCov = sum( cov_mask[2:(n_lowCov_region+1), ]$V3 - cov_mask[2:(n_lowCov_region+1), ]$V2 ) + dim(cov_mask)[1]
+  #OUT_n_lowCov = sum( cov_mask[2:(n_lowCov_region+1), ]$V3 - cov_mask[2:(n_lowCov_region+1), ]$V2 ) + dim(cov_mask)[1]
   
-  if( n_lowCov_region > 0 )
+  if( n_lowCov_region != 0 )
   {
-    lowCov     = unlist( apply( cov_mask[2:(n_lowCov_region+1), -1], 1, function(x) seq( x[1], x[2] ) ) )
-    OUT_lowCov = paste0( apply( cov_mask[2:(n_lowCov_region+1), -1], 1, function(x) paste0( x, collapse = "-") ), 
-                         collapse = "; " )
+    lowCov       = unlist( apply( cov_mask[2:(n_lowCov_region+1), -1], 1, function(x) seq( x[1], x[2] ) ) )
+    OUT_lowCov   = paste0( apply( cov_mask[2:(n_lowCov_region+1), -1], 1, function(x) paste0( x, collapse = "-") ), 
+                           collapse = "; " )
+    
+    Out_N_lowCov = length( lowCov )
+    
   }else
   {
-    lowCov     = unlist( apply( cov_mask[, -1], 1, function(x) seq( x[1], x[2] ) ) )
-    OUT_lowCov = paste0( apply( cov_mask[, -1], 1, function(x) paste0( x, collapse = "-") ), collapse = "; " )  
+    lowCov       = NA
+    OUT_lowCov   = ""
+    Out_N_lowCov = 0
   }
   
   
@@ -141,7 +145,10 @@ for( i in 1: length( sub_folder ) )
     
   }else { all_N = which( align_seq[[1]] == 'n' ); OUTinsertion = "False" }
   
-  inner_N = setdiff( all_N, c( terminus, lowCov ) )
+  OUTall_N = length( all_N )
+  
+  inner_N    = setdiff( all_N, c( terminus, lowCov ) )
+  OUTinner_N = length( inner_N )
   
   if( is(fail_vcf, "data.frame") )
   {
@@ -194,7 +201,7 @@ for( i in 1: length( sub_folder ) )
       if( n_ref[k]  >  n_alt[k]  )
       {
         list_inner_N[[ k ]] = seq( list_inner_N[[ k ]], ( list_inner_N[[ k ]] + n_ref[k]-1 ) )
-        fail_vcf$V2[k]      = paste0( fail_vcf$V2[k], "Del")
+        fail_vcf$V2[k]      = paste0( fail_vcf$V2[k], "Del", (n_ref[k]-n_alt[k]) )
       }
     }
     
@@ -220,6 +227,7 @@ for( i in 1: length( sub_folder ) )
   if( is(primer_vcf, "data.frame") ){ OUTprimer = paste0( primer_vcf$V2, collapse = "; " ) }else{  OUTprimer = "" }
   
   
+  
   ### SEQ DIFFERENCES ------
   
   mx = do.call( rbind, align_seq )
@@ -238,6 +246,8 @@ for( i in 1: length( sub_folder ) )
            })
   
   OUTn_var = length( which( var_site ) )
+  
+
   
   ### OUTPUT ------
   
@@ -264,20 +274,21 @@ for( i in 1: length( sub_folder ) )
   
   #2 print to the file
   
-  l1 = paste0( "Total N positions: ", OUT_n_lowCov )
+  l1 = paste0( "Total N positions: ", OUTall_N )
   l2 = paste0( "Total variants: ", OUTn_var )
   l3 = "# ------------------------"
   l4 = paste0( "Regions of low coverages: ", OUT_lowCov )
-  l5 = paste0( "Unsequenced terminus: ", OUTterminus )
-  l6 = paste0( "Num of N beyond terminus_lowCov: ", length( inner_N ) )
-  l7 = "# ------------------------"
-  l8 = paste0( "Var not merged: ", OUTnot_merged )
-  l9 = paste0( "Var at primer sites: ", OUTprimer )
-  l10 = paste0( "Masked for unknown reason: ", OUTunknown )
-  l11 = paste0( "Insersion: ", OUTinsertion )
-  l12 = "# ------------------------"
+  l5 = paste0( "N in low coverages: ", Out_N_lowCov )    
+  l6 = paste0( "Unsequenced terminus: ", OUTterminus )
+  l7 = paste0( "N beyond terminus_lowCov: ", OUTinner_N )
+  l8 = "# ------------------------"
+  l9 = paste0( "Var not merged: ", OUTnot_merged )
+  l10 = paste0( "Var at primer sites: ", OUTprimer )
+  l11 = paste0( "Masked for unknown reason: ", OUTunknown )
+  l12 = paste0( "Insersion: ", OUTinsertion )
+  l13 = "# ------------------------"
   
-  for(m in 1:12)
+  for(m in 1:13)
   {
     ll = get( paste0( "l", m ) )
     
@@ -305,4 +316,9 @@ for( i in 1: length( sub_folder ) )
   cat("-")
 }
 
+
+
+
+#### VERSION ####
+# 20210709
 
