@@ -119,6 +119,12 @@ for( i in 1: length( sub_folder ) )
   
   #OUT_n_lowCov = sum( cov_mask[2:(n_lowCov_region+1), ]$V3 - cov_mask[2:(n_lowCov_region+1), ]$V2 ) + dim(cov_mask)[1]
   
+  if( n_lowCov_region < 0 )
+  {
+    cat( paste0( sub_folder[i]), "...skip the folder because of very low coverage \n" )
+    next()
+  }
+  
   if( n_lowCov_region != 0 )
   {
     lowCov       = unlist( apply( cov_mask[2:(n_lowCov_region+1), -1], 1, function(x) seq( x[1], x[2] ) ) )
@@ -256,6 +262,9 @@ for( i in 1: length( sub_folder ) )
   n_barcode = str_match( grep( "\\.consensus.fasta", path_sub_fd, value = TRUE ),
                          "barcode([0-9]+).consensus.fasta" )[,2]
   
+  if( is.na( n_barcode ) ){  n_barcode = str_match( grep( "\\.consensus.fasta", path_sub_fd, value = TRUE ),
+                                                    "BC([0-9]+).consensus.fasta" )[,2]  }
+  
   path_file = paste0( sub_folder[i], "barcode", n_barcode, ".report.txt" )
   
   if( TRUE %in% grepl( "barcode[0-9]+\\.report.txt", path_sub_fd ) )
@@ -320,5 +329,5 @@ for( i in 1: length( sub_folder ) )
 
 
 #### VERSION ####
-# 20210709
+# 20210713
 
