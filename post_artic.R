@@ -314,12 +314,53 @@ for( i in 1: length( sub_folder ) )
     } 
   }else
   {
-    cml3 = paste0( "echo '", "**Empty pass.vcf**", "' >> ", path_file )
+    cml3 = paste0( "echo '", "**Empty fail.vcf**", "' >> ", path_file )
     system( cml3 )  
   }
   
   cml_e = paste0( "echo '", "# ------------------------ COMPLETE", "' >> ", path_file )
   system( cml_e )
+  
+  
+  path_cov_mask   = grep( "mask.txt$", path_sub_fd, value = TRUE )
+  
+  
+  
+  ### EDITING SEQ ------
+  
+  path_align = grep( "align.fasta$", path_sub_fd, value = TRUE )
+  
+  if( !is.na( path_align ) & (OUTinner_N > 0) & is(fail_vcf, "data.frame") )
+  {
+    fas = seqinr::read.fasta( path_align, forceDNAtolower = FALSE )
+    seq = seqinr::getSequence( fas )
+    id  = attributes( fas )$names
+    
+    seq_edit = seq[[1]]
+    
+    N_pos = fail_vcf$V2
+    
+    idel_i = which( (n_ref - n_alt) != 0 )
+    if( length( idel_i ) >0 ){ N_pos = N_pos[ -which( N_pos == idel_i ) ]  }
+    
+    N_pos = unique( as.numeric( N_pos ) )
+    
+    for( l in 1: length( N_pos ) )
+    {
+      if( seq_edit[ N_pos[l] ] == "N"  )
+      {
+        seq_edit[ N_pos[l] ] = seq[[3]][ N_pos[ l ] ]
+      }
+    }
+    
+    seq[[4]] =  seq_edit 
+    id[4]    = "edit"
+    
+    id_out  = c( id[2], id[1], id[3], id[4] )
+    seq_out = list( seq[[2]], seq[[1]], seq[[3]], seq[[4]] )
+    
+    write.fasta( sequences = seq_out, names = id_out, file.out = gsub( "align.fasta", "edit.fasta", path_align ) )
+  }
   
   # 
   cat("-")
@@ -329,5 +370,5 @@ for( i in 1: length( sub_folder ) )
 
 
 #### VERSION ####
-# 20210713
+# 20210715
 
