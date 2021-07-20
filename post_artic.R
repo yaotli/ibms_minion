@@ -345,11 +345,14 @@ for( i in 1: length( sub_folder ) )
     
     N_pos = unique( as.numeric( N_pos ) )
     
-    for( l in 1: length( N_pos ) )
+    if( length(N_pos) !=0 )
     {
-      if( seq_edit[ N_pos[l] ] == "N"  )
+      for( l in 1: length( N_pos ) )
       {
-        seq_edit[ N_pos[l] ] = seq[[3]][ N_pos[ l ] ]
+        if( seq_edit[ N_pos[l] ] == "N"  )
+        {
+          seq_edit[ N_pos[l] ] = seq[[3]][ N_pos[ l ] ]
+        }
       }
     }
     
@@ -370,5 +373,6 @@ for( i in 1: length( sub_folder ) )
 
 
 #### VERSION ####
-# 20210715
+# 20210718
+
 
