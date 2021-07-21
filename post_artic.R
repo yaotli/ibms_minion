@@ -209,6 +209,11 @@ for( i in 1: length( sub_folder ) )
         list_inner_N[[ k ]] = seq( list_inner_N[[ k ]], ( list_inner_N[[ k ]] + n_ref[k]-1 ) )
         fail_vcf$V2[k]      = paste0( fail_vcf$V2[k], "Del", (n_ref[k]-n_alt[k]) )
       }
+      
+      if( n_ref[k]  <  n_alt[k]  )
+      {
+        fail_vcf$V2[k] = paste0( fail_vcf$V2[k], "I" )
+      }
     }
     
     unknown_i = which( !inner_N %in% unlist( list_inner_N ) )
@@ -341,7 +346,7 @@ for( i in 1: length( sub_folder ) )
     N_pos = fail_vcf$V2
     
     idel_i = which( (n_ref - n_alt) != 0 )
-    if( length( idel_i ) >0 ){ N_pos = N_pos[ -which( N_pos == idel_i ) ]  }
+    if( length( idel_i ) >0 ){ N_pos = N_pos[ -idel_i ]  }
     
     N_pos = unique( as.numeric( N_pos ) )
     
@@ -370,9 +375,61 @@ for( i in 1: length( sub_folder ) )
 }
 
 
+# compile fasta files 
+
+list_fas = 
+lapply( as.list( sub_folder ),
+        function(x)
+        {
+          fas_files = list.files( x, full.names = TRUE, pattern = "align\\.fasta|edit\\.fasta" )
+          
+          if( length( fas_files ) == 0 )
+          {
+            return( list( NA, NA ) ) 
+            
+          }else
+          {
+            if( length( fas_files ) == 2 )
+            {
+              fas_files = grep( "edit", fas_files, value = TRUE ) 
+              
+              e_i = c( 3,4 )  
+            }else
+            {
+              e_i = c( 3,1 )    
+            }  
+            
+            seq = getSequence( read.fasta( fas_files, forceDNAtolower = FALSE ) )[ e_i ]
+            
+            return( seq )
+          }
+        } )
+
+com_fas = do.call( c, list_fas )
+
+barcode_i = str_match( sub_folder, "barcode([0-9]+)\\/" )[,2]
+
+if( NA %in% ( barcode_i ) )
+{
+  barcode_i = str_match( sub_folder, "BC([0-9]+)\\/" )[,2]
+} 
+
+name_fas0 = paste( paste0( "BC", rep( barcode_i, each = 2 ) ), 
+                   rep( c( "pileup", "edit" ), length( barcode_i ) ), 
+                   sep = "." ) 
+
+
+rm_i = which( sapply( com_fas, function(x) is.na(x[1]) ) )
+  
+if( length(rm_i) > 0 ){ name_fas0 = name_fas0[-rm_i] }
+if( length(rm_i) > 0 ){ com_fas   = com_fas[-rm_i] }
+
+write.fasta( sequences = com_fas, names = name_fas0, file.out = paste0( args[1], "/", "combined.fasta" )  )
+
+cat( "\n DONE" )
 
 
 #### VERSION ####
-# 20210718
+# 20210721
 
 

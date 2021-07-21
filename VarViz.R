@@ -514,9 +514,15 @@ varViz = function( infile        = file.choose(),
   
   # env ---
   
-  lth_e = ifelse( showType == "A", length(range_i), 29903  )
+  lth_e = ifelse( showType == "A", length( range_i)/3+1, 29903 )
   
-  df_fig_line = data.frame( h = c(1, 1), lth = c(1, lth_e ), seg = c( "nt", "nt" ) )
+  df_fig_line = data.frame( h = c(1, 1), lth = c(1, lth_e ), seg = c( "all", "all" ) )
+  
+  if( (region == "S") & ( showType == "A") )
+  {
+    df_fig_line = rbind( df_fig_line, 
+                         data.frame( h = 1, lth = c( 13, 685, 686, lth_e ), seg = c( "S1", "S1", "S2", "S2" ) ) )
+  }
   
   # n ---
   if( length( which( nu_df$char == "N" ) ) > 0 )
@@ -557,7 +563,11 @@ varViz = function( infile        = file.choose(),
         target            = ifelse( grepl( "^-", indel_pos$sub1[x] ), 1, 2 )
       } 
       
-      indel_pos$anno[x] = paste0( "S", target, ": ", indel_pos$pos[x], indel_pos$anno[x] )
+      .char = str_match( indel_pos$anno[x], "(^[DI])([0-9]+)" )[,2]
+      .lth  = as.numeric( str_match( indel_pos$anno[x], "(^[DI])([0-9]+)" )[,3] )
+      
+      indel_pos$anno[x] = paste0( #"S", target, ": ", 
+                                  .char, indel_pos$pos[x], "-", (indel_pos$pos[x]+.lth-1)  )
     }
     
     indel_pos = indel_pos[ -c(3,4) ]
@@ -591,8 +601,13 @@ varViz = function( infile        = file.choose(),
       
       for( x in 1: length( x_pos$anno ) )
       {
-        target        = ifelse( grepl( "^X", x_pos$sub1[x] ), 1, 2 )
-        x_pos$anno[x] = paste0( "S", target, ": ", x_pos$pos[x], x_pos$anno[x] )
+        target = ifelse( grepl( "^X", x_pos$sub1[x] ), 1, 2 )
+        
+        .char = str_match( x_pos$anno[x], "(^[X])([0-9]+)" )[,2]
+        .lth  = as.numeric( str_match( x_pos$anno[x], "(^[X])([0-9]+)" )[,3] )
+        
+        x_pos$anno[x] = paste0( #"S", target, ": ", 
+                                .char, x_pos$pos[x], "-", (x_pos$pos[x]+.lth-1)  )
       }
       
       x_pos = x_pos[ -c(3,4) ]
@@ -632,7 +647,9 @@ varViz = function( infile        = file.choose(),
   {
     fig = 
       ggplot( ) + 
-      geom_line( data = df_fig_line, aes( x = lth, y = h, group = seg ), size = 1.5 ) + 
+      geom_line( data =  subset( df_fig_line, seg == "S1" ) , aes( x = lth, y = h, group = seg ), size = 4, color = "#d62728", alpha = 0.5 ) +
+      geom_line( data =  subset( df_fig_line, seg == "S2" ) , aes( x = lth, y = h, group = seg ), size = 4, color = "#1f77b4", alpha = 0.5 ) +
+      geom_line( data =  subset( df_fig_line, seg == "all" ) , aes( x = lth, y = h, group = seg ), size = 1.5 ) +
       geom_point( data = subset( aa_com_pos, type == "v" ), aes( x = pos, y = h ), color = "#d62728", size = 0.5 ) +
       geom_text_repel( data = subset( aa_com_pos, type == "v" ), aes( x = pos, y = h, label = anno ), 
                        size = 2.5,
@@ -646,7 +663,7 @@ varViz = function( infile        = file.choose(),
       geom_text_repel( data = subset( aa_com_pos, type == "X" ), aes( x = pos, y = h, label = anno ), 
                        size = 2.5,
                        force             = 0.5,
-                       nudge_y           = -0.015,
+                       nudge_y           = -0.01,
                        direction         = "x",
                        vjust             = 0,
                        segment.size      = 0.2,
@@ -654,8 +671,8 @@ varViz = function( infile        = file.choose(),
       
       scale_y_continuous( breaks = 1, label = ifelse( batchName == "" , region, batchName ),
                           limits = c(0.95, 1.05) ) +
-      scale_x_continuous( breaks = c( seq( 0, length( range_i ), by = 1000 ), length( range_i ) ), 
-                          label  = c( seq( 0, length( range_i ), by = 1000 ), length( range_i ) ) ) +
+      scale_x_continuous( breaks = c( seq( 0, lth_e, by = 500 ), lth_e ), 
+                          label  = c( seq( 0, lth_e, by = 500 ), lth_e ) ) +
       theme_bw() +
       theme( panel.grid.minor   = element_blank(),
              panel.grid.major.y = element_blank(),
@@ -682,7 +699,7 @@ varViz = function( infile        = file.choose(),
       geom_text_repel( data = subset( nt_com_pos, type == "indel" ), aes( x = pos, y = h, label = anno ), 
                        size = 2,
                        force             = 0.5,
-                       nudge_y           = -0.015,
+                       nudge_y           = -0.01,
                        direction         = "x",
                        vjust             = 0,
                        segment.size      = 0.2,
@@ -717,7 +734,7 @@ varViz = function( infile        = file.choose(),
 
 ## RUN ------
 
-varViz( region   = "S", savePlot = T, ignoreTermini = 65, batchName = "TEST", showType = "N" )
+varViz( region = "S", savePlot = T, ignoreTermini = 65 )
 
 
 
@@ -725,7 +742,7 @@ varViz( region   = "S", savePlot = T, ignoreTermini = 65, batchName = "TEST", sh
 
 
 #### VERSION ####
-# 20210720
+# 20210721
 
 
 
