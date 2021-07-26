@@ -227,7 +227,7 @@ for( i in 1: length( sub_folder ) )
   
   ### PRIMER REGIONS/LONELY PRESENT ------
   
-  if( is( merged_vcf, "dataframe" ) )
+  if( is( merged_vcf, "data.frame" ) )
   {
     not_merged_i = which( !vcf1_vf2$V2 %in% merged_vcf$V2 )
     
@@ -299,7 +299,7 @@ for( i in 1: length( sub_folder ) )
   l9 = paste0( "Var not merged: ", OUTnot_merged )
   l10 = paste0( "Var at primer sites: ", OUTprimer )
   l11 = paste0( "Masked for unknown reason: ", OUTunknown )
-  l12 = paste0( "Insersion: ", OUTinsertion )
+  l12 = paste0( "Insertion: ", OUTinsertion )
   l13 = "# ------------------------"
   
   for(m in 1:13)
@@ -335,7 +335,7 @@ for( i in 1: length( sub_folder ) )
   
   path_align = grep( "align.fasta$", path_sub_fd, value = TRUE )
   
-  if( !is.na( path_align ) & (OUTinner_N > 0) & is(fail_vcf, "data.frame") )
+  if( !( length( path_align ) == 0 ) & (OUTinner_N > 0) & is(fail_vcf, "data.frame") )
   {
     fas = seqinr::read.fasta( path_align, forceDNAtolower = FALSE )
     seq = seqinr::getSequence( fas )
