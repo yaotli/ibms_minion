@@ -15,6 +15,7 @@ fastaEx = function(filedir = file.choose())
 {
   file     <- seqinr::read.fasta(filedir, forceDNAtolower = FALSE)
   file_seq <- getSequence(file)
+  file_seq <- lapply( file_seq, toupper )  
   file_id  <- attributes(file)$names
   
   return( list(seq = file_seq, 
@@ -638,7 +639,7 @@ varViz = function( infile        = file.choose(),
   {
     ls_ignoreTermini = c( seq( 1, ignoreTermini ), seq( (29903-ignoreTermini+1), 29903 ) )
     
-    nt_com_pos = nt_com_pos[ -which( nt_com_pos$pos %in% ls_ignoreTermini ), ]
+    nt_com_pos = nt_com_pos[ !nt_com_pos$pos %in% ls_ignoreTermini, ]
   }
   
   ## VISUAL ------

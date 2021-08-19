@@ -1,0 +1,5 @@
+runname	start_date	Library	num_barcode	num_fast5	type	note
+MMDD-[n]BC	YYYY-MM-DD	LIBMMDD_[ncov|denv|mixed]	99	99	[artic|test|rnaseq|..]	n=num_barcode
+0716-14BC	2021-07-16	LIB0617_ncov;LIB0628_ncov	1540	14	artic	-	
+0806-24BC	2021-08-06	LIB0803_ncov	582	24	artic	-	
+
