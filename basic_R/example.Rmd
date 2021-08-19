@@ -1,0 +1,101 @@
+---
+title: ""
+output: github_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# LIBRARY 
+
+```{r package, message = FALSE, warning = FALSE}
+require(ggplot2)
+require(tidyverse)
+```
+
+
+# EXAMPLES 
+
+### batch read-in csv
+
+```{r batch read-in csv, message = FALSE, warning = FALSE }
+
+folder = "./example/"
+files  = list.files( folder, pattern = ".csv", full.names = TRUE )
+
+readin_csv = lapply( as.list( files ), 
+                     function(x)
+                     {
+                       df0 = read.csv( x, header = TRUE, stringsAsFactors = FALSE )
+                       
+                       return( df0 )
+                     } )
+
+
+df_csv = do.call( rbind, readin_csv )
+
+print(df_csv)
+```
+
+
+# FIGURES
+
+```{r figures, message = FALSE, warning = FALSE  }
+
+df_csv %>%
+  ggplot() + 
+  geom_point( aes( x = orf, y = count, color = quality ) ) + 
+  scale_color_manual( values = c( "#1f77b4", "#d62728" ) ) + 
+  ggtitle( "count | orf S vs orf N " )
+
+
+df_csv %>%
+  ggplot() + 
+  geom_point( aes( x = orf, y = count, color = quality ), position=position_dodge(0.5) ) + 
+  scale_color_manual( values = c( "#1f77b4", "#d62728" ) ) + 
+  theme_classic() +
+  ggtitle( "count | orf S vs orf N + ( seperate HQ/LQ + theme )" )
+
+
+df_csv %>%
+  ggplot() + 
+  geom_point( aes( x = mapped_reads, y = count, color = sample, shape = orf ), size = 2 ) +
+  ggtitle( "mapped_reads vs count | ORF | sample" )
+  
+
+df_csv %>%
+  ggplot() + 
+  geom_point( aes( x = mapped_reads, y = count, color = sample, shape = orf ), size = 2 ) +
+  geom_line( aes( x = mapped_reads, y = count, color = sample, group = sample ), size = 1 ) +
+  ggtitle( "line - mapped_reads vs count | ORF | sample" )
+  
+df_csv %>%
+  filter( quality == "LQ" ) %>%
+  ggplot() + 
+  geom_point( aes( x = orf, y = count ) ) +
+  ggtitle( "count | orf S vs orf N ( quality = HQ )" )
+
+df_csv %>%
+  filter( quality == "LQ" ) %>%
+  ggplot() + 
+  geom_boxplot( aes( x = orf, y = count ) ) +
+  ggtitle( "boxplot - count | orf S vs orf N ( quality = HQ )" )
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+

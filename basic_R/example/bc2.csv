@@ -1,0 +1,4 @@
+sample,amplicon,mapped_reads,quality,count,orf
+bc2,1,3,HQ,2,S
+bc2,1,0,LQ,0,S
+bc2,1,100,LQ,9,N
