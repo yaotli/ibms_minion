@@ -426,10 +426,10 @@ if( length(rm_i) > 0 ){ com_fas   = com_fas[-rm_i] }
 
 write.fasta( sequences = com_fas, names = name_fas0, file.out = paste0( args[1], "/", "combined.fasta" )  )
 
-cat( "\n DONE" )
+cat( "\n post_artic.R done \n" )
 
 
 #### VERSION ####
-# 20210721
+# 20211003
 
 

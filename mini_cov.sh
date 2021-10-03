@@ -3,13 +3,13 @@ set -e
 
 # data
 run_name="MMDDMN00X-nnBC"
-barcode=("01" "02" "03" "04" "05" "06" "07" "08" "09" "10" "11" "12")
-threads=4
+barcode=("01" "02" "03" "04" "05" "06" "07" "08" "09" "10" "11" "12" "13" "14" "15" "16" "17" "18" "19" "20" "21" "22" "23" "24")
+threads=24
 
 primerSchemes="/home/ylllab2021/app/artic-ncov2019/primer_schemes"
 fastq_dir="/work/ylllab2021/temp/LIB/demulti"
 fast5_dir="/work/ylllab2021/temp/LIB/fast5_pass"
-seq_summary_dir="/work/ylllab2021/temp/LIB/fastq/split_pool/sequencing_summary.txt"
+seq_summary_dir="/work/ylllab2021/temp/LIB/fastq/sequencing_summary.txt"
 
 # env
 
@@ -21,8 +21,8 @@ for i in ${barcode[@]}
 
 do
 cm_guppyplex="artic guppyplex \
-              --min-length 400 \
-              --max-length 1500 \
+              --min-length 100 \
+              --max-length 30000 \
               --directory ${fastq_dir}/barcode${i} \
               --prefix ${run_name}"
 

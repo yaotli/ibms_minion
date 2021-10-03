@@ -15,3 +15,6 @@ TEMP=/work/ylllab2021/temp
 
 
 ~/app/ont-guppy/bin/guppy_basecaller -i $TEMP/LIB/fast5_pass -s $TEMP/LIB/fastq -q 0 -x cuda:0 -c dna_r9.4.1_450bps_hac.cfg > basecallreport_gpu.txt
+
+~/app/ont-guppy/bin/guppy_barcoder -r --require_barcodes_both_ends -i $TEMP/LIB/fastq/pass -s $TEMP/LIB/demulti -x cuda:0 --arrangements_files "barcode_arrs_nb12.cfg barcode_arrs_nb24.cfg" > barcodereport_gpu.txt
+
