@@ -14,8 +14,8 @@ echo 'press Ctl+c if NOT'
 sleep 5 
 
 echo 'start unzip... it may take awile in TWCC'
-tar -xvf $TEMP/fast5_pass.tar.gz
-mkdir $TEMP/LIB
+tar -xvf $TEMP/fast5_pass.tar.gz -C $TEMP
+mkdir -p $TEMP/LIB
 mv $TEMP/fast5_pass $TEMP/LIB
 
 echo 'start basecalling'

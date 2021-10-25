@@ -5,7 +5,7 @@ set -e
 TEMP=/work/ylllab2021/temp
 CODE=/home/ylllab2021/script/ibms_minion
 
-Rscript ibms_minion/post_artic.R $TEMP/LIB
+Rscript $CODE/post_artic.R $CODE
 
 echo 'clean the script folder'
 

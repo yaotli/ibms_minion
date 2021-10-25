@@ -12,4 +12,4 @@ echo 'press Ctl+c if NOT'
 sleep 10
 
 echo 'start ARTIC pipeline'
-sbatch sbatch_minicov 
+sbatch sbatch_minicov.sh 
