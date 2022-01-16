@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --job-name=barcode
-#SBATCH --account="GOV110078" 
+#SBATCH --account="" 
 #SBATCH --cpus-per-task=48 
 #SBATCH --nodes=1
 #SBATCH --time=12:00:00 

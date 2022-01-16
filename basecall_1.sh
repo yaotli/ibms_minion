@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --job-name=split_1
-#SBATCH --account="GOV110078" 
+#SBATCH --account="" 
 #SBATCH --cpus-per-task=48 
 #SBATCH --nodes=8
 #SBATCH --time=48:00:00 

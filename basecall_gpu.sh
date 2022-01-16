@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --job-name=basecall_gpu
-#SBATCH --account="GOV110159"
+#SBATCH --account=""
 #SBATCH --gres=gpu:2
 #SBATCH --time=24:00:00
 #SBATCH --partition="gp1d" # or gp1d/gp2d/gp4d/gtest
