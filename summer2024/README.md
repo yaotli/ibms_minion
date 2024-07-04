@@ -1,18 +1,20 @@
 ### Summrary 
 
-[Basecalling and demultiplex](#1 Basecalling and demultiplex)
+[Requirements](#package-and-softwares)
 
-[QC](#2 QC)
+[Basecalling and demultiplex](#basecalling-and-demultiplex)
 
-[Reference mapping](#3 Reference mapping)
+[QC](#qc)
 
-[Coverage and consensus sequence](#4-coverage-and-consensus-sequence)
+[Reference mapping](#reference-mapping)
+
+[Coverage and consensus sequence](#coverage-and-consensus-sequence)
 
 [Metagenomics](#metagenomics)
 
 
 
-### Package/Softwares 
+### Package and Softwares 
 
 1. Linux/WSL
 2. conda/bioconda 
@@ -46,7 +48,7 @@ Words after the `#` (hashtag) are comments and in most case commands after the `
 
 
 
-### 1 Basecalling and demultiplex 
+### Basecalling and demultiplex 
 
 
 Specifying the direction (here: dorado-0.7.2-osx-arm64) to use the the _dorado_ you installed
@@ -63,7 +65,7 @@ Specifying the direction (here: dorado-0.7.2-osx-arm64) to use the the _dorado_ 
 ~/Applications/dorado-0.7.2-osx-arm64/bin/dorado demux --emit-fastq --no-classify --emit-summary --output-dir demulti calls.bam
 ```
 
-### 2 QC 
+### QC 
 
 ```
 ~/Applications/nanoq-0.10.0-x86_64-apple-darwin/nanoq -i demulti/EXP-NBD196_barcode48.fastq -s -t 5 -vvv
@@ -79,7 +81,7 @@ you will see:
 
 
 
-### 3 Reference mapping 
+### Reference mapping 
 
 
 Who's in the reference file?
@@ -127,7 +129,7 @@ samtools view -c -F2308 barcode48_sorted.bam
     484
 
 
-### 4 Coverage and consensus sequence 
+### Coverage and consensus sequence 
 
 Parpare a reference file only containing EV
 
