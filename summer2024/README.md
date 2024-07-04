@@ -1,5 +1,18 @@
+### Summrary 
 
-### To install 
+[Basecalling and demultiplex](#1 Basecalling and demultiplex)
+
+[QC](#2 QC)
+
+[Reference mapping](#3 Reference mapping)
+
+[Coverage and consensus sequence](#4-coverage-and-consensus-sequence)
+
+[Metagenomics](#metagenomics)
+
+
+
+### Package/Softwares 
 
 1. Linux/WSL
 2. conda/bioconda 
@@ -11,7 +24,7 @@
 8. kraken2 [source](https://ccb.jhu.edu/software/kraken2/index.shtml) and bracken2 [source](https://ccb.jhu.edu/software/bracken/)
 9. bedtools*
 10. Krona*
-
+11. bcftools* (bcftools=1.10)
 
 *install via conda/mamba
 
@@ -32,14 +45,19 @@
 Words after the `#` (hashtag) are comments and in most case commands after the `#` won't function in the shell terminal. Therefore, you don't need to copy and paste lines after `#`s in the following sections. 
 
 
+
 ### 1 Basecalling and demultiplex 
 
 
 Specifying the direction (here: dorado-0.7.2-osx-arm64) to use the the _dorado_ you installed
 
 ```
-# basecalling the files in fast5_all and generate calls.bam
+# (with GPU) basecalling the files in fast5_all and generate calls.bam
 ~/Applications/dorado-0.7.2-osx-arm64/bin/dorado basecaller -v ~/Applications/dorado-0.7.2-osx-arm64/model/dna_r9.4.1_e8_hac@v3.3 fast5_all --kit-name EXP-NBD196 --barcode-both-ends > calls.bam
+
+# (without GPU)
+~/Applications/dorado-0.7.2-osx-arm64/bin/dorado basecaller -v ~/Applications/dorado-0.7.2-osx-arm64/model/dna_r9.4.1_e8_hac@v3.3 fast5_all --kit-name EXP-NBD196 --barcode-both-ends -x > calls.bam
+
 
 # demultiplex the calls.bam file
 ~/Applications/dorado-0.7.2-osx-arm64/bin/dorado demux --emit-fastq --no-classify --emit-summary --output-dir demulti calls.bam
@@ -137,6 +155,12 @@ Check the `barcode48_sorted_ev.bam` file with _Tablet_
 ![](tablet.png)
 
 
+Evaluate coverage with a table containing positions and depth of each position
+
+```
+bedtools genomecov -d -split -ibam barcode48_sorted_ev.bam > barcode48_coverage.txt
+```
+
 
 Visaulization the coverage (position vs depth) by any software you like (Excel, Python). 
 
@@ -167,7 +191,7 @@ bcftools consensus -f ev_ref.fa barcode48_pile.gz  -i '(type="snp")&((DP4[0]+DP4
 
 
 
-### 5 a taste of metagenomics
+### Metagenomics
 
 ```
 # map the original .fastq data against human genome
@@ -196,11 +220,11 @@ in the summarized file `bracken.tsv` showing ~80% filtered reads from EV-D while
 
 
 
-Visualize the result using Krona plot (do `updateTaxonomy.sh` if it was newly installed)
+visualize the result using Krona plot (do `updateTaxonomy.sh` if it was newly installed)
 
 ```
 ktImportTaxonomy -t 5 -m 2 k2.report_bracken_species.txt
 ```
 
-![](korna.png)
+![](krona.png)
 
