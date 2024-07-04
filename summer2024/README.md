@@ -204,7 +204,7 @@ uman.filtered.sam
 samtools fastq -n -f 4 human.filtered.sam > human.filtered.fastq
 ```
 
-Download viral database and unzip the file 
+Download viral database (download)[#files] and unzip the file 
 
 ```
 # use kraken to map the .fastq to a dataset containing viral species
