@@ -58,7 +58,7 @@ Specifying the direction (here: dorado-0.7.2-osx-arm64) to use the the _dorado_ 
 ~/Applications/dorado-0.7.2-osx-arm64/bin/dorado basecaller -v ~/Applications/dorado-0.7.2-osx-arm64/model/dna_r9.4.1_e8_hac@v3.3 fast5_all --kit-name EXP-NBD196 --barcode-both-ends > calls.bam
 
 # (without GPU)
-~/Applications/dorado-0.7.2-osx-arm64/bin/dorado basecaller -v ~/Applications/dorado-0.7.2-osx-arm64/model/dna_r9.4.1_e8_hac@v3.3 fast5_all --kit-name EXP-NBD196 --barcode-both-ends -x > calls.bam
+~/Applications/dorado-0.7.2-osx-arm64/bin/dorado basecaller -v ~/Applications/dorado-0.7.2-osx-arm64/model/dna_r9.4.1_e8_hac@v3.3 fast5_all --kit-name EXP-NBD196 --barcode-both-ends -x cpu > calls.bam
 
 
 # demultiplex the calls.bam file
