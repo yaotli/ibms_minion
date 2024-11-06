@@ -76,7 +76,7 @@ samtools view -F 2308 human.filtered.sam | grep -v '^@' - | cut -f1 | sort | uni
 
 comm -12 virus_readID.txt human_readID.txt  > both_readID.txt
 
-subseq demulti/EXP-NBD196_barcode48.fastq both_readID.txt > both.fq
+seqtk subseq demulti/EXP-NBD196_barcode48.fastq both_readID.txt > both.fq
 
 ```
 
